@@ -1,0 +1,205 @@
+/* Nature-inspired Background */
+body {
+    background: linear-gradient(135deg, #d6cfc7, #bcae8a);
+    color: #3e3e3e;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #6d4c41; /* Rich brown color */
+}
+.navbar-brand, .nav-link {
+    color: #f8f5e8 !important;
+}
+
+/* Main Header */
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #3e3e3e;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+.text-primary {
+    color: #8d6e63 !important;
+}
+
+/* Card Styling */
+.card {
+    background-color: #e8e0d0; /* Light, earthy beige */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #3e3e3e;
+    padding: 20px;
+    margin: 20px 0;
+}
+.card .card-title {
+    color: #6d4c41; /* Brownish color */
+    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+}
+.card i {
+    color: #a1887f; /* Soft brown for icons */
+}
+
+/* Footer Styling */
+footer {
+    background-color: #6d4c41;
+    color: #f8f5e8;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover effect for card */
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+.navbar-brand:hover, .nav-link:hover {
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+}
+
+
+/* Styles specific to login.html */
+.login-page .card {
+    background-color: #e8e0d0; /* Light, earthy beige */
+    border: none;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Form Styling */
+.login-page .form-label {
+    color: #6d4c41; /* Dark brown for labels */
+}
+
+.login-page .form-control {
+    border-radius: 5px;
+    border-color: #a1887f; /* Soft brown */
+}
+
+.login-page .form-control:focus {
+    box-shadow: 0 0 5px rgba(141, 110, 99, 0.5);
+    border-color: #8d6e63;
+}
+
+.login-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.login-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+
+/* Styles specific to register.html */
+.register-page .card {
+    background-color: #e8e0d0; /* Light, earthy beige */
+    border: none;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Form Styling */
+.register-page .form-label {
+    color: #6d4c41; /* Dark brown for labels */
+}
+
+.register-page .form-control {
+    border-radius: 5px;
+    border-color: #a1887f; /* Soft brown */
+}
+
+.register-page .form-control:focus {
+    box-shadow: 0 0 5px rgba(141, 110, 99, 0.5);
+    border-color: #8d6e63;
+}
+
+.register-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.register-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+
+/* Styles specific to dashboard.html */
+.dashboard-page .card {
+    background-color: #f3f4f6; /* Light gray for card background */
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s; /* Add smooth transition effect */
+}
+
+.dashboard-page .card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.dashboard-page .card-title {
+    color: #4a4a4a; /* Dark gray for card titles */
+}
+
+.dashboard-page .btn-primary {
+    background-color: #6d4c41; /* Match with existing theme */
+    border-color: #6d4c41;
+}
+
+.dashboard-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+.dashboard-page .navbar {
+    background-color: #6d4c41; /* Rich brown color */
+}
+.dashboard-page .navbar-brand, .nav-link {
+    color: #f8f5e8 !important;
+}
+
+body.account-page {
+    background-color: #f8f9fa; /* Light background for the account page */
+}
+
+.account-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.account-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+.user-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.user-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+.transaction-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.transaction-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}
+
+.edit_account-page .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.edit_account-page .btn-primary:hover {
+    background-color: #8d6e63;
+    border-color: #8d6e63;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View/Edit Account - Bank Name</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="edit_account-page">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Nature Bank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user_controller.get_profile') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('account_controller.get_accounts') }}">Account Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('transaction_controller.get_transactions') }}">Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- View/Edit Account Form -->
+    <div class="container my-5">
+        <h2 class="text-center">View/Edit Account</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} text-center">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('account_controller.update_account', account_id=account.id) }}" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="mb-3">
+                <label for="account_type" class="form-label">Account Type</label>
+                <select class="form-control" id="account_type" name="account_type" required>
+                    <option value="savings" {% if account.account_type == 'savings' %}selected{% endif %}>Savings</option>
+                    <option value="checking" {% if account.account_type == 'checking' %}selected{% endif %}>Checking</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="account_number" class="form-label">Account Number</label>
+                <input type="text" class="form-control" id="account_number" name="account_number" value="{{ account.account_number }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="balance" class="form-label">Balance</label>
+                <input type="number" class="form-control" id="balance" name="balance" value="{{ account.balance }}" step="0.01" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Update Account</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3">
+        <p>&copy; 2024 Nature Bank. All rights reserved.</p>
+        <p>123 Greenway Blvd, Eco City, Earth | Phone: (123) 456-7890 | Email: support@naturebank.com</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

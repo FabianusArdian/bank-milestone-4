@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Management - Bank Name</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="transaction-page">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Nature Bank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user_controller.get_profile') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('account_controller.get_accounts') }}">Account Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('transaction_controller.get_transactions') }}">Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="text-center">Transaction Management</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} text-center">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Transaction List -->
+        <div class="my-4">
+            <h4>Your Transactions</h4>
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>From Account</th>
+                        <th>To Account</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.id }}</td>
+                        <td>{{ transaction.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ transaction.type }}</td>
+                        <td>{{ transaction.from_account_id or 'N/A' }}</td>
+                        <td>{{ transaction.to_account_id or 'N/A' }}</td>
+                        <td>Rp.{{ transaction.amount }}</td>
+                        <td>{{ transaction.description or 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Create New Transaction Form -->
+        <div class="my-4">
+            <h4>Initiate New Transaction</h4>
+            <form action="{{ url_for('transaction_controller.create_transaction') }}" method="POST">
+                <div class="mb-3">
+                    <label for="type" class="form-label">Transaction Type</label>
+                    <select class="form-control" id="type" name="type" required onchange="toggleAccountFields()">
+                        <option value="deposit">Deposit</option>
+                        <option value="withdrawal">Withdrawal</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+
+                <!-- From Account Dropdown (only visible for withdrawals and transfers) -->
+                <div class="mb-3" id="fromAccountDiv" style="display: none;">
+                    <label for="from_account" class="form-label">From Account</label>
+                    <select class="form-control" id="from_account" name="from_account_id">
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">{{ account.account_type }} - {{ account.account_number }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- To Account Dropdown -->
+                <div class="mb-3" id="toAccountDiv">
+                    <label for="to_account" class="form-label">To Account</label>
+                    <select class="form-control" id="to_account" name="to_account_id" required>
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">{{ account.account_type }} - {{ account.account_number }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="description" name="description">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3">
+        <p>&copy; 2024 Nature Bank. All rights reserved.</p>
+        <p>123 Greenway Blvd, Eco City, Earth | Phone: (123) 456-7890 | Email: support@naturebank.com</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleAccountFields() {
+            var transactionType = document.getElementById("type").value;
+            var fromAccountDiv = document.getElementById("fromAccountDiv");
+            var toAccountDiv = document.getElementById("toAccountDiv");
+
+            if (transactionType === "deposit") {
+                fromAccountDiv.style.display = "none";  // Hide from account for deposits
+                toAccountDiv.style.display = "block";   // Show to account for deposits
+                document.getElementById("from_account").removeAttribute("required");
+            } else if (transactionType === "withdrawal") {
+                fromAccountDiv.style.display = "block";  // Show from account for withdrawals
+                toAccountDiv.style.display = "none";      // Hide to account for withdrawals
+                document.getElementById("from_account").setAttribute("required", "true");
+            } else if (transactionType === "transfer") {
+                fromAccountDiv.style.display = "block";   // Show from account for transfers
+                toAccountDiv.style.display = "block";     // Show to account for transfers
+                document.getElementById("from_account").setAttribute("required", "true");
+                document.getElementById("to_account").setAttribute("required", "true");
+            }
+        }
+        // Initialize the form fields based on default selection
+        document.addEventListener("DOMContentLoaded", toggleAccountFields);
+    </script>
+</body>
+</html>
