@@ -6,7 +6,7 @@ authors = ["FabianusArdian <fabianusardianu@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 flask = "^3.0.3"
 flask-jwt-extended = "^4.6.0"
 poetry-dotenv-plugin = "^0.2.0"
