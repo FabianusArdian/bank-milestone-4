@@ -1,6 +1,6 @@
-FROM python:3.12-slim-bookworm AS base
+FROM python:3.12-slim AS base
 # Install Poetry
-RUN pip install poetry
+RUN pip install --no-cache-dir poetry
 ENV POETRY_HOME="/opt/poetry" \
     POETRY_VIRTUALENVS_CREATE=true \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
@@ -10,8 +10,8 @@ ENV PATH="$PATH:$POETRY_HOME/bin"
 FROM base AS build
 WORKDIR /app
 # Install dependency from pyproject.toml
-COPY pyproject.toml .
-RUN  poetry lock --no-update && poetry install --only=main
+COPY pyproject.toml poetry.lock .  # Ensure poetry.lock is present
+RUN poetry install --only=main --no-root
 COPY . .
 
 # Runtime stage
