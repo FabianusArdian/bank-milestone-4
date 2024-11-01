@@ -1,27 +1,25 @@
-# Use the official Python image
-FROM python:3.9-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set the working directory
-WORKDIR /app
-
+FROM python:3.12-slim-bookworm AS base
 # Install Poetry
 RUN pip install poetry
+ENV POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_CREATE=true \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1
+ENV PATH="$PATH:$POETRY_HOME/bin"
 
-# Copy the dependency files
-COPY pyproject.toml poetry.lock /app/
-
-# Install dependencies
-RUN poetry config virtualenvs.create false && poetry install --no-dev
-
-# Copy the rest of the application code
+FROM base AS build
+WORKDIR /app
+# Install dependencies from pyproject.toml
+COPY pyproject.toml ./
+RUN poetry lock --no-update && poetry install --only=main --no-root
 COPY . .
 
-# Expose the port the app runs on
+# Runtime stage
+FROM base AS runtime
+WORKDIR /app
+COPY --from=build /app /app
+ENV PATH="/app/.venv/bin:$PATH"
+RUN echo "source /app/.venv/bin/activate" >> /etc/profile.d/venv.sh
 EXPOSE 5000
 
-# Command to run the application
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "--app", "app", "run", "--host", "0.0.0.0"]
