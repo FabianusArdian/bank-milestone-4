@@ -9,9 +9,9 @@ ENV PATH="$PATH:$POETRY_HOME/bin"
 
 FROM base AS build
 WORKDIR /app
-# Install dependencies from pyproject.toml
-COPY pyproject.toml ./
-RUN poetry lock --no-update && poetry install --only=main --no-root
+# Install dependency from pyproject.toml
+COPY pyproject.toml .
+RUN  poetry lock --no-update && poetry install --only=main
 COPY . .
 
 # Runtime stage
@@ -22,4 +22,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 RUN echo "source /app/.venv/bin/activate" >> /etc/profile.d/venv.sh
 EXPOSE 5000
 
-CMD ["flask", "--app", "app", "run", "--host=0.0.0.0", "--port=$Port"]
+CMD ["flask", "--app", "app", "run", "--host", "0.0.0.0"]
