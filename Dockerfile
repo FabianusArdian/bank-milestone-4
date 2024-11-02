@@ -22,4 +22,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 RUN echo "source /app/.venv/bin/activate" >> /etc/profile.d/venv.sh
 EXPOSE 5000
 
-CMD ["flask", "--app", "app", "run", "--host", "0.0.0.0"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
