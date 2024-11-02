@@ -178,7 +178,14 @@ def get_profile():
             'description': 'New email address for the user'
         },
         {
-            'name': 'password',
+            'name': 'old_password',
+            'in': 'formData',
+            'type': 'string',
+            'required': False,
+            'description': 'Current password of the user (for validation)'
+        },
+        {
+            'name': 'new_password',
             'in': 'formData',
             'type': 'string',
             'required': False,
@@ -191,6 +198,9 @@ def get_profile():
         },
         404: {
             'description': 'User not found'
+        },
+        403: {
+            'description': 'Old password is incorrect'
         }
     }
 })
@@ -206,15 +216,23 @@ def update_profile():
     user.username = request.form.get('username', user.username)
     user.email = request.form.get('email', user.email)
 
-    password = request.form.get('password')
-    if password:
-        user.set_password(password)
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
+
+    # Check if the old password is provided and validate it
+    if old_password and not user.check_password(old_password):
+        flash("Old password is incorrect.", "danger")
+        return redirect(url_for('user_controller.get_profile'))
+
+    if new_password:
+        user.set_password(new_password)
 
     session.commit()
     session.close()
 
     flash("Profile updated successfully", "success")
     return redirect(url_for('user_controller.get_profile'))
+
 
 @user_controller.route('/logout')
 @swag_from({

@@ -62,8 +62,12 @@
                         <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">New Password (optional)</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <label for="old_password" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" minlength="6" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Update Profile</button>
                 </form>

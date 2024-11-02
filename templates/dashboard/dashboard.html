@@ -47,7 +47,7 @@
                     <div class="card-body">
                         <h5 class="card-title">User Management</h5>
                         <p class="card-text">Update your profile, change your password, and manage account settings.</p>
-                        <a href="/user-management" class="btn btn-primary">Manage User</a>
+                        <a href="{{ url_for('user_controller.get_profile') }}" class="btn btn-primary">Manage User</a>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Account Management</h5>
                         <p class="card-text">View your accounts, check balances, and create or delete accounts.</p>
-                        <a href="/account-management" class="btn btn-primary">Manage Accounts</a>
+                        <a href="{{ url_for('user_controller.get_profile') }}" class="btn btn-primary">Manage Accounts</a>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Transaction Management</h5>
                         <p class="card-text">Initiate transfers, view transaction history, and monitor account activity.</p>
-                        <a href="/transaction-management" class="btn btn-primary">Manage Transactions</a>
+                        <a href="{{ url_for('transaction_controller.get_transactions') }}" class="btn btn-primary">Manage Transactions</a>
                     </div>
                 </div>
             </div>

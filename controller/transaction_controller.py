@@ -1,6 +1,7 @@
 from flask import Blueprint, request, flash, redirect, url_for, render_template
 from models.transaction import Transaction
 from models.account import Account
+from models.user import User
 from connector.db import Session
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
@@ -39,19 +40,18 @@ transaction_controller = Blueprint('transaction_controller', __name__)
             'format': 'date-time',
             'required': False,
             'description': 'Optional filter to specify the end date for transactions'
+        },
+        {
+            'name': 'type',
+            'in': 'query',
+            'type': 'string',
+            'required': False,
+            'description': 'Optional filter to retrieve transactions of a specific type'
         }
     ],
     'responses': {
         200: {
-            'description': 'List of transactions for the authenticated user',
-            'examples': {
-                'application/json': {
-                    'transactions': [
-                        {'id': 1, 'type': 'deposit', 'amount': 100.00, 'created_at': '2024-01-01T10:00:00'},
-                        {'id': 2, 'type': 'withdrawal', 'amount': 50.00, 'created_at': '2024-01-02T10:00:00'}
-                    ]
-                }
-            }
+            'description': 'List of transactions for the authenticated user'
         }
     }
 })
@@ -60,6 +60,7 @@ def get_transactions():
     account_id = request.args.get('account_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
+    transaction_type = request.args.get('type')  # Get transaction type from query parameters
 
     session = Session()
     query = session.query(Transaction).join(
@@ -78,12 +79,15 @@ def get_transactions():
         )
     if start_date and end_date:
         query = query.filter(Transaction.created_at.between(start_date, end_date))
+    if transaction_type:  # Filter by transaction type if provided
+        query = query.filter(Transaction.type == transaction_type)
 
     transactions = query.all()
     accounts = session.query(Account).filter_by(user_id=user_id).all()
     session.close()
 
     return render_template('/dashboard/transactions.html', transactions=transactions, accounts=accounts)
+
 
 # GET /transactions/<id>: Retrieve details of a specific transaction
 @transaction_controller.route('/transactions/<int:transaction_id>', methods=['GET'])
@@ -178,6 +182,13 @@ def get_transaction(transaction_id):
             'type': 'string',
             'required': False,
             'description': 'Description of the transaction'
+        },
+        {
+            'name': 'confirm_password',
+            'in': 'formData',
+            'type': 'string',
+            'required': True,
+            'description': 'Confirm password for transaction'
         }
     ],
     'responses': {
@@ -196,8 +207,15 @@ def create_transaction():
     to_account_id = request.form.get('to_account_id') if transaction_type in ["transfer", "deposit"] else None
     amount = Decimal(request.form.get('amount'))
     description = request.form.get('description', '')
+    confirm_password = request.form.get('confirm_password')
 
     session = Session()
+
+    user = session.query(User).filter_by(id=user_id).first()
+    if not user or not user.check_password(confirm_password):
+        flash("Password confirmation failed.", "danger")
+        session.close()
+        return redirect(url_for('transaction_controller.get_transactions'))
 
     from_account = session.query(Account).filter_by(id=from_account_id, user_id=user_id).first() if from_account_id else None
     to_account = session.query(Account).filter_by(id=to_account_id, user_id=user_id).first() if to_account_id else None

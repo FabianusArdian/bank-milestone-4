@@ -46,6 +46,31 @@
             {% endif %}
         {% endwith %}
 
+        <form method="GET" action="{{ url_for('transaction_controller.get_transactions') }}" class="mb-4">
+            <div class="row">
+                <div class="col">
+                    <label for="type" class="form-label">Transaction Type</label>
+                    <select class="form-select" id="type" name="type">
+                        <option value="">All</option>
+                        <option value="deposit">Deposit</option>
+                        <option value="withdrawal">Withdrawal</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date">
+                </div>
+                <div class="col">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+                </div>
+                <div class="col d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </form>
+
         <!-- Transaction List -->
         <div class="my-4">
             <h4>Your Transactions</h4>
@@ -117,6 +142,10 @@
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <input type="text" class="form-control" id="description" name="description">
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Submit Transaction</button>
             </form>
